@@ -29,7 +29,7 @@ public class Play extends BasicGameState {
 		sheet = new TileSpriteSheet("res/sheet.png", 32);
 		testLevel = new TileLevel(generateTiles(), "res/map.png", new BasicTile(0, new TileSprite(new Image("res/map.png")), 0xFFFFFF));
 		player = new Player();
-		fish.add(new Fish(new Vector2f(800, 400), Fish.FishType.regular, 300));
+		fish.add(new Fish(new Vector2f(800, 400), Fish.FishType.regular, 300)); //TODO: replace
 	}
 
 	@Override
@@ -50,6 +50,11 @@ public class Play extends BasicGameState {
 		
 		for(int i = 0 ; i < this.fish.size() ; i++) {
 			this.fish.get(i).update(delta);
+			
+			if(this.player.getCollison().contains(this.fish.get(i).getCollision()) && this.player.getEating()) {
+				this.fish.remove(i);
+				System.out.println("fish removed");
+			}
 		}
 	}
 

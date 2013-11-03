@@ -1,5 +1,6 @@
 package me.bevilacqua.sharkjam;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class Player {
 	private int currentAnimation;
 	private int health;
 	private int score;
+	
+	private Rectangle collison;
 	
 	private boolean eating;
 	private List<Image> eatingAnimation = new ArrayList<Image>();
@@ -38,8 +41,13 @@ public class Player {
 			this.animation.add(new Image("res/shark2.png"));
 			this.animation.add(new Image("res/shark1.png"));
 			this.animation.add(new Image("res/shark1.png"));
+			
+			this.eatingAnimation.add(new Image("res/sharkEating.png"));
+			this.eatingAnimation.add(new Image("res/sharkEating1.png"));
+			this.eatingAnimation.add(new Image("res/sharkEating.png"));
 
 			this.position = new Vector2f(36 * 2 , 36 * 2);
+			this.collison = new Rectangle((int)this.position.getX(), (int)this.position.getY(), this.animation.get(0).getWidth(), this.animation.get(0).getHeight());
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -50,7 +58,7 @@ public class Player {
 		if(!this.eating) {
 			this.animation.get(this.currentAnimation).draw(position.x, position.y);
 		} else {
-			//Play animation loop
+			playEatingAnimation();
 		}
 	} 
 	
@@ -64,7 +72,11 @@ public class Player {
 		
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
 			this.eating = true;
+			this.elapsedTime = 0;
+			this.eatingAnimationIndex = 0;
 		}
+		
+		this.collison.setLocation((int)this.position.getX(), (int)this.position.getY());
 		
 		//Animation
 		if(!eating) {
@@ -76,16 +88,49 @@ public class Player {
 				this.elapsedTime += delta;
 			}
 		} else {
-			//TODO: Finish eating animation logic!
+			if(this.elapsedTime > 250) {
+				if(this.eatingAnimationIndex < this.eatingAnimation.size() - 1) this.eatingAnimationIndex++;
+				else {
+					this.eating = false;
+				}
+				this.elapsedTime = 0;
+			} else {
+				this.elapsedTime += delta;
+			}
 		}
 	}
 	
 	private void playEatingAnimation() { //Rendering
-		if(this.eatingAnimationIndex >= this.eatingAnimation.size()) {
-			this.eating = false;
-			this.eatingAnimationIndex = 0;
-		} else {
 			this.eatingAnimation.get(this.eatingAnimationIndex).draw(position.x, position.y);
-		}
 	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public Rectangle getCollison() {
+		return collison;
+	}
+
+	public void setCollison(Rectangle collison) {
+		this.collison = collison;
+	}
+	
+	public boolean getEating() {
+		return this.eating;
+	}
+	
+	
 }
