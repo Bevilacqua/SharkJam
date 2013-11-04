@@ -57,7 +57,6 @@ public class Fish {
 			this.animation.get(this.currentAnimation).draw(position.getX(), position.getY(), this.colorFilter);
 		else { 
 			this.animation.get(this.currentAnimation).draw(position.getX(), position.getY());
-			System.out.println("Rendering regular");
 		}
 
 	}

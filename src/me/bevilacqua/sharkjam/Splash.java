@@ -23,7 +23,7 @@ public class Splash extends BasicGameState{
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame sbg, Graphics g) throws SlickException {
-		if(trackSplash >= rajolaSplash.length - 1) sbg.enterState(1); //TODO: make it 1 
+		if(trackSplash >= rajolaSplash.length - 1) sbg.enterState(Main.States.Title.ordinal()); //TODO: make it 1 
 		rajolaSplash[trackSplash].draw();		
 	}
 	

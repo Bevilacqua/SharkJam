@@ -10,12 +10,13 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.state.StateBasedGame;
 
 public class Player {
 	private Image idleImage;
 	private List<Image> animation = new ArrayList<Image>();
 	private int currentAnimation;
-	private int health = 5000;
+	private int health = 7500;
 	private int score;
 	
 	private Rectangle collison;
@@ -69,6 +70,7 @@ public class Player {
 
 		if(input.isKeyDown(Input.KEY_LEFT) && position.getX() > 10) this.position.add(new Vector2f(-1,0));
 		if(input.isKeyDown(Input.KEY_RIGHT) && position.getX() < (800 - 64)) this.position.add(new Vector2f(3,0));
+		
 		
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
 			this.eating = true;

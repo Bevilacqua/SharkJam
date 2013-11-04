@@ -11,17 +11,19 @@ public class Main extends StateBasedGame {
 	
 	public enum States {
 		Splash,
-		Play
+		Play,
+		Title
 	}
 	
 	public Main() {
-		super("Jacob Bevilacqua: SharkJam");
+		super("Shark Bite");
 	}
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		addState(new Splash());
 		addState(new Play());
+		addState(new Title());
 		enterState(States.Splash.ordinal());
 	}
 	
@@ -30,6 +32,7 @@ public class Main extends StateBasedGame {
 		AppGameContainer agc = new AppGameContainer(main);
 		agc.setDisplayMode(800,640, false);
 		agc.setTargetFrameRate(60);
+		agc.setShowFPS(false);
 		agc.start();
 	}
 
