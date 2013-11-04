@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -15,12 +16,16 @@ public class Fish {
 	private int elapsedTime;
 	private int delay;
 	
+	private Color colorFilter;
+	
 	private Rectangle collision;
 	private Vector2f position;
 	private FishType type;
 	
 	public enum FishType {
-		regular //Not sure what different fish types will do yet... maybe speed
+		regular, //Not sure what different fish types will do yet... maybe speed
+		dangerous,
+		special
 	}
 	
 	public Fish(Vector2f position, FishType type, int animationDelay) throws SlickException {
@@ -28,18 +33,33 @@ public class Fish {
 		this.type = type;
 		this.delay = animationDelay;
 		
+		this.animation.add(new Image("res/fish/regular.png"));
+		this.animation.add(new Image("res/fish/regular1.png"));
+		this.animation.add(new Image("res/fish/regular1.png"));
+		this.animation.add(new Image("res/fish/regular.png"));
+		this.collision = new Rectangle((int)position.getX(), (int)position.getY(), this.animation.get(0).getWidth(), this.animation.get(0).getHeight());
+		
 		switch(this.type) {
 		case regular:
-			this.animation.add(new Image("res/fish/regular.png"));
-			this.animation.add(new Image("res/fish/regular1.png"));
-			this.animation.add(new Image("res/fish/regular1.png"));
-			this.animation.add(new Image("res/fish/regular.png"));
-			this.collision = new Rectangle((int)position.getX(), (int)position.getY(), this.animation.get(0).getWidth(), this.animation.get(0).getHeight());
+			this.colorFilter = null;
+			break;
+		case dangerous:
+			this.colorFilter = Color.red;
+			break;
+		case special:
+			this.colorFilter = Color.green;
+			break;
 		}
 	}
 	
 	public void render(Graphics g) {
-		this.animation.get(this.currentAnimation).draw(position.getX(), position.getY());
+		if(this.colorFilter != null)
+			this.animation.get(this.currentAnimation).draw(position.getX(), position.getY(), this.colorFilter);
+		else { 
+			this.animation.get(this.currentAnimation).draw(position.getX(), position.getY());
+			System.out.println("Rendering regular");
+		}
+
 	}
 	
 	public void update(int delta) {

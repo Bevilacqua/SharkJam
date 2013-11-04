@@ -15,7 +15,7 @@ public class Player {
 	private Image idleImage;
 	private List<Image> animation = new ArrayList<Image>();
 	private int currentAnimation;
-	private int health;
+	private int health = 5000;
 	private int score;
 	
 	private Rectangle collison;
@@ -28,7 +28,7 @@ public class Player {
 	
 	private Vector2f position;
 	
-	public Player() {
+	public Player() {	
 		try {
 			this.idleImage = new Image("res/shark.png");
 			
@@ -64,11 +64,11 @@ public class Player {
 	
 	public void update(int delta, GameContainer gc) {
 		Input input = gc.getInput();
-		if(input.isKeyDown(Input.KEY_UP)) this.position.add(new Vector2f(0,-3));
-		if(input.isKeyDown(Input.KEY_DOWN)) this.position.add(new Vector2f(0,3));
+		if(input.isKeyDown(Input.KEY_UP) && position.getY() > 32) this.position.add(new Vector2f(0,-3));
+		if(input.isKeyDown(Input.KEY_DOWN) && position.getY() < 540) this.position.add(new Vector2f(0,3));
 
-		if(input.isKeyDown(Input.KEY_LEFT)) this.position.add(new Vector2f(-1,0));
-		if(input.isKeyDown(Input.KEY_RIGHT)) this.position.add(new Vector2f(3,0));
+		if(input.isKeyDown(Input.KEY_LEFT) && position.getX() > 10) this.position.add(new Vector2f(-1,0));
+		if(input.isKeyDown(Input.KEY_RIGHT) && position.getX() < (800 - 64)) this.position.add(new Vector2f(3,0));
 		
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
 			this.eating = true;
@@ -77,7 +77,8 @@ public class Player {
 		}
 		
 		this.collison.setLocation((int)this.position.getX(), (int)this.position.getY());
-		
+		this.health -= delta; //Lose health unless eating
+
 		//Animation
 		if(!eating) {
 			if(this.elapsedTime > 250) {

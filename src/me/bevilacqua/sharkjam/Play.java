@@ -3,6 +3,7 @@ package me.bevilacqua.sharkjam;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -29,7 +30,11 @@ public class Play extends BasicGameState {
 		sheet = new TileSpriteSheet("res/sheet.png", 32);
 		testLevel = new TileLevel(generateTiles(), "res/map.png", new BasicTile(0, new TileSprite(new Image("res/map.png")), 0xFFFFFF));
 		player = new Player();
+		
 		fish.add(new Fish(new Vector2f(800, 400), Fish.FishType.regular, 300)); //TODO: replace
+		fish.add(new Fish(new Vector2f(800, 300), Fish.FishType.dangerous, 300)); //TODO: replace
+		fish.add(new Fish(new Vector2f(800, 200), Fish.FishType.regular, 300)); //TODO: replace
+
 	}
 
 	@Override
@@ -41,6 +46,11 @@ public class Play extends BasicGameState {
 		}
 		
 		player.render(g);
+		
+		//GUI
+		g.setColor(Color.black);
+		g.drawString(("Fish eaten: " + this.player.getScore()), gc.getWidth() - 150, 20);
+		g.drawString(("Health: " + this.player.getHealth()), gc.getWidth() - 150, 35);
 	}
 
 	@Override
@@ -51,9 +61,20 @@ public class Play extends BasicGameState {
 		for(int i = 0 ; i < this.fish.size() ; i++) {
 			this.fish.get(i).update(delta);
 			
-			if(this.player.getCollison().contains(this.fish.get(i).getCollision()) && this.player.getEating()) {
+			if(this.player.getCollison().contains(this.fish.get(i).getCollision()) && this.player.getEating()) {				
+				this.player.setScore(this.player.getScore() + 1);
+				
+				switch(this.fish.get(i).getType()) {
+				case regular:
+					this.player.setHealth(this.player.getHealth() + 1000);
+				case dangerous:
+					this.player.setHealth(this.player.getHealth() - 500);
+				case special:
+					this.player.setHealth(this.player.getHealth() + 2000);
+				}
+				
 				this.fish.remove(i);
-				System.out.println("fish removed");
+
 			}
 		}
 	}
